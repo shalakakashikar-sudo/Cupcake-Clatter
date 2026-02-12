@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import NanDingMascot from './components/NanDingMascot';
 import CrunchTest from './components/CrunchTest';
 import { ONOMATOPOEIA_DATA } from './constants';
@@ -11,6 +11,7 @@ const App: React.FC = () => {
   const [bites, setBites] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
+  const biteTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const categories = ['All', ...Object.values(Category)];
 
@@ -22,8 +23,23 @@ const App: React.FC = () => {
   });
 
   const handleBite = () => {
-    setBites(prev => (prev >= 4 ? 0 : prev + 1));
+    setBites(prev => (prev >= 4 ? 1 : prev + 1));
+    
+    // Auto-heal logic: Reset bites to 0 after 2 seconds
+    if (biteTimeoutRef.current) {
+      clearTimeout(biteTimeoutRef.current);
+    }
+    biteTimeoutRef.current = setTimeout(() => {
+      setBites(0);
+    }, 2000);
   };
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (biteTimeoutRef.current) clearTimeout(biteTimeoutRef.current);
+    };
+  }, []);
 
   return (
     <div className="min-h-screen pb-16 relative selection:bg-rose-200 selection:text-rose-900 bg-[#fff1f2]">

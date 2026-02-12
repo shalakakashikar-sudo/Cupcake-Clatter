@@ -6,7 +6,7 @@ import { MASCOT_COMMENTS } from '../constants';
 type Emotion = 'happy' | 'wink' | 'surprised';
 
 interface NanDingMascotProps {
-  bites: number; // Current bite count (0-4)
+  bites: number; // Current bite count
   onBite: () => void;
   comment?: string;
 }
@@ -45,7 +45,7 @@ const NanDingMascot: React.FC<NanDingMascotProps> = ({ bites, onBite, comment })
     }, 1200);
   };
 
-  // Palette exactly matching the reference image
+  // Aesthetic Palette
   const colors = {
     outline: '#5b2b62',       // Dark purple/burgundy outline
     frosting: '#ffffff',      // Pure white frosting
@@ -56,135 +56,155 @@ const NanDingMascot: React.FC<NanDingMascotProps> = ({ bites, onBite, comment })
     eye: '#000000',           // Pure black eyes
     stickerBorder: '#ffffff', // White die-cut border
     stickerShadow: '#ffccd4', // Soft pink outer glow/border
-    biteFill: '#fff1f2'       // Match background to simulate missing chunk
+    bubbleBorder: '#ff9ea5'   // Pink for bubble border
   };
 
   const isBitten = bites > 0;
 
   return (
     <div className="flex flex-col items-center gap-1 relative z-50">
-      {/* Speech Bubble */}
-      <div className={`absolute top-1/2 -translate-y-1/2 -left-52 w-48 bg-white p-4 rounded-2xl shadow-[0_4px_0px_#5b2b62] border-[3px] border-[#5b2b62] text-[11px] text-[#5b2b62] font-black z-50 transition-all duration-500 transform ${isWiggling ? 'scale-110 -rotate-2' : 'scale-100 rotate-0'}`}>
+      {/* Speech Bubble - Pink and White Combo */}
+      <div className={`absolute top-1/2 -translate-y-1/2 -left-56 w-52 bg-white p-4 rounded-3xl shadow-lg border-[4px] border-[#ff9ea5] text-[11px] text-[#5b2b62] font-black z-50 transition-all duration-500 transform ${isWiggling ? 'scale-110 -rotate-3' : 'scale-100 rotate-0'}`}>
         <p className="text-center leading-snug drop-shadow-sm">{displayComment}</p>
-        <div className="absolute top-1/2 -translate-y-1/2 -right-2.5 w-4 h-4 bg-white border-r-[3px] border-t-[3px] border-[#5b2b62] rounded-tr-sm rotate-45"></div>
+        {/* Tail */}
+        <div className="absolute top-1/2 -translate-y-1/2 -right-3 w-5 h-5 bg-white border-r-[4px] border-t-[4px] border-[#ff9ea5] rounded-tr-md rotate-45"></div>
       </div>
 
       {/* Nan-Ding Mascot Button */}
       <button 
         onClick={handleMascotClick}
-        className={`relative w-28 h-28 md:w-32 md:h-32 cursor-pointer focus:outline-none transition-all duration-300 ${isWiggling ? 'animate-wiggle' : 'hover:scale-105 active:scale-95'}`}
+        className={`relative w-32 h-32 md:w-40 md:h-40 cursor-pointer focus:outline-none transition-all duration-300 ${isWiggling ? 'animate-wiggle' : 'hover:scale-105 active:scale-95'}`}
         title="Click to take a bite!"
       >
         <svg viewBox="0 0 250 250" className="w-full h-full overflow-visible">
-          {/* Outer Sticker Border & Shadow Effect */}
+          {/* Sticker Outer Glow/White Border - Matches new taller cloudy shape */}
           <path 
-            d="M50 110 C50 60 90 45 125 45 C160 45 200 60 200 110 C200 125 180 135 180 145 L180 190 Q180 215 125 215 Q70 215 70 190 L70 145 C70 135 50 125 50 110 Z" 
+            d="M30 110 C30 70 60 30 90 20 C110 10 140 10 160 20 C190 30 220 70 220 110 C220 140 200 155 180 160 L180 205 Q180 235 125 235 Q70 235 70 205 L70 160 C50 155 30 140 30 110 Z" 
             fill={colors.stickerBorder} 
-            stroke={colors.stickerShadow} 
-            strokeWidth="12" 
+            stroke={colors.stickerShadow}
+            strokeWidth="14"
             transform="scale(1.1) translate(-10, -10)"
           />
 
-          <g transform="translate(15, 15)">
-            {/* 1. Wrapper with Heart Pattern */}
+          <g transform="translate(10, 10)">
+            {/* Wrapper with Heart Pattern */}
             <defs>
-              <pattern id="heartPatternRef" x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse">
+              <pattern id="heartPatternFinalV3" x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse">
                 <rect width="24" height="24" fill={colors.wrapperRed} />
                 <path d="M12 18 L10.5 16.5 Q7 13 7 10.5 Q7 8 9 8 Q10.5 8 12 9.5 Q13.5 8 15 8 Q17 8 17 10.5 Q17 13 13.5 16.5 Z" fill="white" />
               </pattern>
+              
+              {/* Mask for the bite effect */}
+              <mask id="biteMaskV3">
+                <rect x="0" y="0" width="250" height="250" fill="white" />
+                {isBitten && (
+                  <g transform="translate(195, 75) rotate(20)">
+                    <circle cx="0" cy="0" r="35" fill="black" />
+                    <circle cx="-15" cy="25" r="32" fill="black" />
+                  </g>
+                )}
+              </mask>
             </defs>
-            <path 
-              d="M60 140 L190 140 L175 195 Q170 215 125 215 Q80 215 75 195 Z" 
-              fill="url(#heartPatternRef)" 
-              stroke={colors.outline} 
-              strokeWidth="6" 
-            />
 
-            {/* 2. Scalloped Frosting */}
-            <path 
-              d="M40 120 C40 60 90 40 125 40 C160 40 210 60 210 120 C210 140 190 150 170 150 Q125 150 125 135 Q125 150 80 150 C60 150 40 140 40 120 Z" 
-              fill={colors.frosting} 
-              stroke={colors.outline} 
-              strokeWidth="6" 
-            />
+            {/* Cupcake Body */}
+            <g mask="url(#biteMaskV3)">
+              {/* 1. Wrapper */}
+              <path 
+                d="M60 145 L190 145 L175 210 Q170 230 125 230 Q80 230 75 210 Z" 
+                fill="url(#heartPatternFinalV3)" 
+                stroke={colors.outline} 
+                strokeWidth="6" 
+              />
 
-            {/* 3. The Bite - Subtractive look, taking a chunk out of the left frosting bump */}
-            {isBitten && (
-              <g transform="translate(45, 60)">
-                <path 
-                  d="M-20 -20 Q0 10 20 -20 Q40 10 60 -20 Q80 10 100 -20 L100 -50 L-20 -50 Z" 
-                  fill={colors.biteFill} 
-                  stroke={colors.outline} 
-                  strokeWidth="6" 
-                  strokeLinejoin="round" 
-                />
-              </g>
-            )}
+              {/* 2. TALLER CLOUDY Frosting */}
+              <path 
+                d="M35 110 
+                   C35 55 65 35 95 45 
+                   C105 15 145 15 155 45 
+                   C185 35 215 55 215 110 
+                   C215 135 195 155 170 155 
+                   L80 155 
+                   C55 155 35 135 35 110 Z" 
+                fill={colors.frosting} 
+                stroke={colors.outline} 
+                strokeWidth="6" 
+              />
 
-            {/* 4. Strawberry Garnish (Nestled in frosting bump) */}
-            {!isBitten && (
-              <g transform="translate(145, 45) scale(0.9) rotate(10)">
-                {/* Leaves */}
-                <ellipse cx="5" cy="20" rx="12" ry="7" fill={colors.leaves} stroke={colors.outline} strokeWidth="4" transform="rotate(-30 5 20)"/>
-                <ellipse cx="25" cy="20" rx="12" ry="7" fill={colors.leaves} stroke={colors.outline} strokeWidth="4" transform="rotate(30 25 20)"/>
-                
-                {/* Berry Body */}
-                <path 
-                  d="M15 10 C0 10 -5 30 15 50 C35 30 30 10 15 10 Z" 
-                  fill={colors.strawberryRed} 
-                  stroke={colors.outline} 
-                  strokeWidth="5" 
-                />
-                
-                {/* Berry Face */}
-                <circle cx="9" cy="25" r="2.5" fill={colors.outline} />
-                <circle cx="21" cy="25" r="2.5" fill={colors.outline} />
-                <path d="M12 30 Q15 33 18 30" fill="none" stroke={colors.outline} strokeWidth="2" strokeLinecap="round" />
-                <path d="M22 15 L26 19 M22 19 L26 15" stroke="white" strokeWidth="2" strokeLinecap="round" />
-              </g>
-            )}
+              {/* Frosting Inner Detail */}
+              <path 
+                d="M35 110 Q55 140 85 140 Q110 140 125 125 Q140 140 165 140 Q195 140 215 110" 
+                fill="none" 
+                stroke={colors.outline} 
+                strokeWidth="6" 
+                strokeLinecap="round" 
+              />
 
-            {/* 5. Nan-Ding Face */}
-            <g transform="translate(10, 20)">
-              {emotion !== 'surprised' ? (
-                <g>
-                  {/* Left Eye */}
-                  <circle cx="85" cy="115" r="14" fill={colors.eye} />
-                  <circle cx="79" cy="109" r="5" fill="white" />
-                  <circle cx="88" cy="120" r="2.5" fill="white" />
-
-                  {/* Right Eye */}
-                  {emotion === 'wink' ? (
-                    <path d="M140 115 Q155 130 170 115" fill="none" stroke={colors.outline} strokeWidth="6" strokeLinecap="round" />
-                  ) : (
-                    <g>
-                      <circle cx="160" cy="115" r="14" fill={colors.eye} />
-                      <circle cx="154" cy="109" r="5" fill="white" />
-                      <circle cx="163" cy="120" r="2.5" fill="white" />
-                    </g>
-                  )}
-
-                  {/* Simple Cute Mouth */}
-                  <path d="M112 125 Q125 135 138 125" fill="none" stroke={colors.outline} strokeWidth="5" strokeLinecap="round" />
-                </g>
-              ) : (
-                <g>
-                  {/* Surprised Face */}
-                  <path d="M75 110 L95 125 M95 110 L75 125" stroke={colors.outline} strokeWidth="6" strokeLinecap="round" />
-                  <path d="M150 110 L170 125 M170 110 L150 125" stroke={colors.outline} strokeWidth="6" strokeLinecap="round" />
-                  <circle cx="122" cy="135" r="8" fill="none" stroke={colors.outline} strokeWidth="4" />
+              {/* Strawberry Garnish - SHIFTED SIGNIFICANTLY UPWARDS */}
+              {!isBitten && (
+                <g transform="translate(160, 15) scale(0.9) rotate(20)">
+                  {/* Leaves */}
+                  <ellipse cx="5" cy="15" rx="12" ry="7" fill={colors.leaves} stroke={colors.outline} strokeWidth="4" transform="rotate(-30 5 15)"/>
+                  <ellipse cx="25" cy="15" rx="12" ry="7" fill={colors.leaves} stroke={colors.outline} strokeWidth="4" transform="rotate(30 25 15)"/>
+                  {/* Berry Body */}
+                  <path d="M15 8 C0 8 -5 30 15 50 C35 30 30 8 15 8 Z" fill={colors.strawberryRed} stroke={colors.outline} strokeWidth="4" />
+                  {/* Strawberry Face */}
+                  <circle cx="10" cy="25" r="2.5" fill={colors.outline} />
+                  <circle cx="20" cy="25" r="2.5" fill={colors.outline} />
+                  <path d="M13 30 Q15 33 17 30" fill="none" stroke={colors.outline} strokeWidth="2" strokeLinecap="round" />
                 </g>
               )}
 
-              {/* Pink Cheeks */}
-              <circle cx="60" cy="130" r="10" fill={colors.cheek} opacity="0.9" />
-              <circle cx="185" cy="130" r="10" fill={colors.cheek} opacity="0.9" />
+              {/* Face - Centered for Maximum Cuteness */}
+              <g transform="translate(0, -5)">
+                {emotion !== 'surprised' ? (
+                  <g>
+                    {/* Left Eye */}
+                    <circle cx="85" cy="115" r="16" fill={colors.eye} />
+                    <circle cx="78" cy="107" r="7" fill="white" />
+                    <circle cx="89" cy="123" r="3.5" fill="white" />
+
+                    {/* Right Eye */}
+                    {emotion === 'wink' ? (
+                      <path d="M145 115 Q160 140 175 115" fill="none" stroke={colors.outline} strokeWidth="8" strokeLinecap="round" />
+                    ) : (
+                      <g>
+                        <circle cx="165" cy="115" r="16" fill={colors.eye} />
+                        <circle cx="158" cy="107" r="7" fill="white" />
+                        <circle cx="169" cy="123" r="3.5" fill="white" />
+                      </g>
+                    )}
+
+                    {/* Cute Smile */}
+                    <path d="M115 125 Q125 133 135 125" fill="none" stroke={colors.outline} strokeWidth="6" strokeLinecap="round" />
+                  </g>
+                ) : (
+                  <g>
+                    {/* Surprised Eyes */}
+                    <path d="M75 105 L95 125 M95 105 L75 125" stroke={colors.outline} strokeWidth="8" strokeLinecap="round" />
+                    <path d="M155 105 L175 125 M175 105 L155 125" stroke={colors.outline} strokeWidth="8" strokeLinecap="round" />
+                    {/* Small Mouth */}
+                    <circle cx="125" cy="135" r="8" fill="none" stroke={colors.outline} strokeWidth="5" />
+                  </g>
+                )}
+
+                {/* Rosy Cheeks */}
+                <circle cx="55" cy="130" r="13" fill={colors.cheek} opacity="0.8" />
+                <circle cx="195" cy="130" r="13" fill={colors.cheek} opacity="0.8" />
+              </g>
             </g>
+            
+            {/* Outline for the Bite */}
+            {isBitten && (
+               <g transform="translate(195, 75) rotate(20)">
+                <path d="M -35 -15 A 35 35 0 0 0 5 35" fill="none" stroke={colors.outline} strokeWidth="6" strokeLinecap="round"/>
+                <path d="M -20 10 A 32 32 0 0 0 15 50" fill="none" stroke={colors.outline} strokeWidth="6" strokeLinecap="round"/>
+              </g>
+            )}
           </g>
         </svg>
       </button>
       
-      <span className="text-[#5b2b62] font-black text-sm tracking-tighter drop-shadow-sm bg-white/90 px-3 py-0.5 rounded-full border-[3px] border-[#5b2b62] shadow-sm -rotate-1">
+      <span className="text-[#5b2b62] font-black text-xs tracking-tighter drop-shadow-sm bg-white/95 px-3 py-1 rounded-full border-[3px] border-[#fb7185] shadow-sm -rotate-2">
         Nan-Ding
       </span>
 
