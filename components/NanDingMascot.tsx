@@ -63,21 +63,37 @@ const NanDingMascot: React.FC<NanDingMascotProps> = ({ bites, onBite, comment })
 
   return (
     <div className="flex flex-col items-center gap-1 relative z-50">
-      {/* Speech Bubble - Pink and White Combo */}
-      <div className={`absolute top-1/2 -translate-y-1/2 -left-56 w-52 bg-white p-4 rounded-3xl shadow-lg border-[4px] border-[#ff9ea5] text-[11px] text-[#5b2b62] font-black z-50 transition-all duration-500 transform ${isWiggling ? 'scale-110 -rotate-3' : 'scale-100 rotate-0'}`}>
+      {/* 
+        Responsive Speech Bubble:
+        Mobile: Centered above mascot (bottom-[115%])
+        Desktop: Positioned to the left (md:right-[115%])
+      */}
+      <div className={`
+        absolute z-50 transition-all duration-500 transform
+        bottom-[115%] left-1/2 -translate-x-1/2 w-44
+        md:bottom-auto md:top-1/2 md:-translate-y-1/2 md:left-auto md:right-[115%] md:translate-x-0 md:w-52
+        bg-white p-3 md:p-4 rounded-3xl shadow-lg border-[4px] border-[#ff9ea5] 
+        text-[10px] md:text-[11px] text-[#5b2b62] font-black
+        ${isWiggling ? 'scale-110 -rotate-3' : 'scale-100 rotate-0'}
+      `}>
         <p className="text-center leading-snug drop-shadow-sm">{displayComment}</p>
-        {/* Tail */}
-        <div className="absolute top-1/2 -translate-y-1/2 -right-3 w-5 h-5 bg-white border-r-[4px] border-t-[4px] border-[#ff9ea5] rounded-tr-md rotate-45"></div>
+        
+        {/* Responsive Tail */}
+        <div className={`
+          absolute bg-white border-[#ff9ea5] rotate-45 transition-all
+          bottom-[-10px] left-1/2 -translate-x-1/2 border-b-[4px] border-r-[4px] w-4 h-4
+          md:bottom-auto md:top-1/2 md:-translate-y-1/2 md:left-auto md:right-[-10px] md:translate-x-0 md:border-b-0 md:border-t-[4px] md:border-r-[4px] md:rounded-tr-md md:w-5 md:h-5
+        `}></div>
       </div>
 
       {/* Nan-Ding Mascot Button */}
       <button 
         onClick={handleMascotClick}
-        className={`relative w-32 h-32 md:w-40 md:h-40 cursor-pointer focus:outline-none transition-all duration-300 ${isWiggling ? 'animate-wiggle' : 'hover:scale-105 active:scale-95'}`}
+        className={`relative w-24 h-24 md:w-40 md:h-40 cursor-pointer focus:outline-none transition-all duration-300 ${isWiggling ? 'animate-wiggle' : 'hover:scale-105 active:scale-95'}`}
         title="Click to take a bite!"
       >
         <svg viewBox="0 0 250 250" className="w-full h-full overflow-visible">
-          {/* Sticker Outer Glow/White Border - Matches new taller cloudy shape */}
+          {/* Sticker Outer Glow/White Border */}
           <path 
             d="M30 110 C30 70 60 30 90 20 C110 10 140 10 160 20 C190 30 220 70 220 110 C220 140 200 155 180 160 L180 205 Q180 235 125 235 Q70 235 70 205 L70 160 C50 155 30 140 30 110 Z" 
             fill={colors.stickerBorder} 
@@ -139,7 +155,7 @@ const NanDingMascot: React.FC<NanDingMascotProps> = ({ bites, onBite, comment })
                 strokeLinecap="round" 
               />
 
-              {/* Strawberry Garnish - SHIFTED SIGNIFICANTLY UPWARDS */}
+              {/* Strawberry Garnish */}
               {!isBitten && (
                 <g transform="translate(160, 15) scale(0.9) rotate(20)">
                   {/* Leaves */}
