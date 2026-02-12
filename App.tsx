@@ -71,6 +71,9 @@ const App: React.FC = () => {
             <p className="text-rose-400 font-bold text-xs md:text-sm tracking-wide">
               A Scrummy Guide to Onomatopoeia 🍰
             </p>
+            <p className="text-rose-300 font-medium text-[10px] md:text-xs italic mt-0.5">
+              (Words that imitate sounds.)
+            </p>
           </div>
           
           <div className="flex-shrink-0">
