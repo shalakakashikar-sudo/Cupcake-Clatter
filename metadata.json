@@ -1,7 +1,5 @@
 {
   "name": "Cupcake Clatter",
   "description": "An interactive onomatopoeia learning platform with a strawberry cupcake theme, featuring Nan-Ding the mascot and 'The Crunch Test' mini-game.",
-  "requestFramePermissions": [
-    "microphone"
-  ]
+  "requestFramePermissions": []
 }

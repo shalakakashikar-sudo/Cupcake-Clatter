@@ -11,7 +11,8 @@ const App: React.FC = () => {
   const [bites, setBites] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
-  const biteTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  // Fix: Use ReturnType<typeof setTimeout> instead of NodeJS.Timeout to ensure compatibility in browser environments
+  const biteTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const categories = ['All', ...Object.values(Category)];
 
